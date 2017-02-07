@@ -1,39 +1,38 @@
+//check required arguments
 if(process.argv[2]==undefined)
 {
 	console.log("Error: You must supply an argument");
 	process.exit(1);
 }
 
+//set up dependencies
 var moment = require('moment');
 var states =  require( 'datasets-us-states-abbr-names' );
 states['DC'] = 'Washington D.C.';
 states['US'] = 'United States';
-
-var file = "./"+process.argv[2];
-
-let fs = require('fs'),
-	PDFParser = require("pdf2json");
-
+let fs = require('fs'), PDFParser = require("pdf2json");
 let pdfParser = new PDFParser();
 
+//global variables
+var file = "./"+process.argv[2];
+
+//PDF processing
 pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError) );
 pdfParser.on("pdfParser_dataReady", pdfData => {
+	console.log('Parsing complete!');
 	processJSON(pdfData);
 });
 
-console.log("starting parse");
-
+//start process
+console.log("Staring Parse...");
 pdfParser.loadPDF(file);
 
-//processJSON(JSON.parse(fs.readFileSync('./ITRCBreachReport2015.json', 'utf8')));
-
-
-
+//process function
 function processJSON(obj)
 {
+	console.log("Starting Scrape...");
 	var cats = ['Business','Medical/Healthcare','Government/Military','Educational','Banking/Credit/Financial'];
 	var types = ['Paper Data','Electronic'];
-	console.log("starting conversion");
 	var obs = [];
 	var yvals = [6, 15, 23, 30, 37];
 	var str='';
@@ -77,10 +76,6 @@ function processJSON(obj)
 			{ //RR
 				tob.exp = s;
 				repNum= i+1;
-				//if(s.includes('Unknown'))
-				//{
-				//	repNum = i+3;
-				//}
 			}
 			else if(idF&&i==repNum)
 			{ //Number
@@ -90,7 +85,7 @@ function processJSON(obj)
 				rF=true;
 			}
 			if(idF&&tob.name.length>0&&tob.type.length>0&&tob.type.length>0&&tob.exp.length>0&&rF)
-			{
+			{ //Finish observation
 				obs.push(tob);
 				tob = null;
 				tob = {id:'',name:'',state:'--',date:'NA',type:'',cat:'',exp:'',rep:'NA'};
@@ -102,7 +97,7 @@ function processJSON(obj)
 			}
 		}
 	});
-	console.log('extracted '+obs.length+' objects');
+	console.log('Conversion Complete: Extracted '+obs.length+' objects.');
 	obs.forEach(function(e,i,a){
 		var delim='~';
 		str+= e.id+delim+e.name+delim+e.state+delim+e.date+delim+e.type+delim+e.cat+delim+e.exp+delim+e.rep+'\r\n';
@@ -110,7 +105,8 @@ function processJSON(obj)
 	fs.writeFile(file+'.txt',str);
 }
 
+//Number to p decimals
 function nTP(num,p)
 {
-	return Math.trunc(num*Math.pow(10,p))/Math.pow(10,p);//parseFloat(num.toString().match(/^-?\d+(?:\.\d{0,p})?/)[0])
+	return Math.trunc(num*Math.pow(10,p))/Math.pow(10,p);
 }
