@@ -64,11 +64,11 @@ function processJSON(obj)
 				tob.date = s;
 				sF=true;
 			}
-			else if(idF&&types.includes(s)) //if(s=='Electronic'||s=='Paper Data')
+			else if(idF&&types.includes(s))
 			{ //Type
 				tob.type = s;
 			}
-			else if(idF&&cats.includes(s))//if(Math.abs(e.Texts[i].x-18)<5&&yvals.includes(nTP(e.Texts[i].x,0))) //if(s=='Business'||s=='Medical/Healthcare'||s=='Government/Military'||s=='Banking/Credit/Financial')
+			else if(idF&&cats.includes(s))
 			{ //Category
 				tob.cat = s;
 			}
