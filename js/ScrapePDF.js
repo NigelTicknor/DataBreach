@@ -1,3 +1,10 @@
+/**
+* ScrapePDF.js - Scrapes data from an IRTC PDF
+* Author: Nigel Ticknor
+* Usage: node ScrapePDF file.pdf
+* Output: file.pdf.txt
+**/
+
 //check required arguments
 if(process.argv[2]==undefined)
 {

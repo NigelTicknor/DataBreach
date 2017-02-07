@@ -1,3 +1,10 @@
+/**
+* p2j.js - Converts a PDF to a JSON file
+* Author: Nigel Ticknor
+* Usage: node p2j file.pdf
+* Output: file.pdf.json
+**/
+
 //check required arguments
 if(process.argv[2]==undefined)
 {
