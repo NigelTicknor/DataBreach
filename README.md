@@ -10,4 +10,4 @@
 
 **breachimport.R** - Scripts for importing and cleaning the data.
 
-**shiny*** - The source code for the webapp.
+**shiny** - The source code for the webapp.
